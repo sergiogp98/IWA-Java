@@ -28,12 +28,12 @@ RUN BACKGROUND export PATH
 # Verify the Maven installation
 RUN mvn -version
 
+# Copy reposiroty to root directory
 COPY / .
-RUN ls
 
 # Run IWA-Java application
-#RUN mvn clean package && \
-#    mvn spring-boot:run
+RUN mvn clean package && \
+    mvn spring-boot:run
 
 # Make port 8080 available to the world outside this container
-#EXPOSE WEBSITE localhost:8080
+EXPOSE WEBSITE localhost:8080
