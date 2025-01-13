@@ -32,8 +32,8 @@ RUN mvn -version
 COPY / .
 
 # Run IWA-Java application
-RUN mvn clean package && \
-    mvn spring-boot:run
+RUN mvn clean package
+RUN BACKGROUND mvn spring-boot:run
 
 # Make port 8080 available to the world outside this container
 EXPOSE WEBSITE localhost:8080
