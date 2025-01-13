@@ -23,14 +23,17 @@ RUN wget https://dlcdn.apache.org/maven/maven-3/3.9.9/binaries/apache-maven-3.9.
 # Setting MAVEN Path Environment Variables
 ENV M2_HOME=./apache-maven-3.9.9
 ENV PATH=$M2_HOME/bin:$PATH
-RUN export PATH
+RUN BACKGROUND export PATH
 
 # Verify the Maven installation
-RUN mvn -version
+RUN maven -version
+
+COPY / .
+RUN ls
 
 # Run IWA-Java application
-RUN mvn clean package && \
-    mvn spring-boot:run
+#RUN mvn clean package && \
+#    mvn spring-boot:run
 
 # Make port 8080 available to the world outside this container
-EXPOSE WEBSITE localhost:8080
+#EXPOSE WEBSITE localhost:8080
