@@ -26,7 +26,7 @@ ENV PATH=$M2_HOME/bin:$PATH
 RUN export PATH
 
 # Verify the Maven installation
-RUN maven -version
+RUN mvn -version
 
 # Run IWA-Java application
 RUN mvn clean package && \
