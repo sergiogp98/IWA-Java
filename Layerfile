@@ -1,4 +1,36 @@
 FROM vm/ubuntu:22.04
 
-RUN pwd
-RUN ls
+# Change to /tmp
+# WORKDIR /tmp  
+
+# Download Java JDK
+RUN apt-get update && \
+    wget https://download.java.net/java/GA/jdk11/13/GPL/openjdk-11.0.1_linux-x64_bin.tar.gz && \
+    tar -xvf openjdk-11.0.1_linux-x64_bin.tar.gz
+
+# Setting JAVA_HOME and Path Environment Variables
+ENV JAVA_HOME=./jdk-11.0.1
+ENV PATH=$JAVA_HOME/bin:$PATH
+RUN export PATH
+
+# Verify the Java Installation
+RUN java -version
+
+# Installing Maven
+RUN wget https://dlcdn.apache.org/maven/maven-3/3.9.9/binaries/apache-maven-3.9.9-bin.tar.gz && \
+    tar -xvf apache-maven-3.9.9-bin.tar.gz 
+         
+# Setting MAVEN Path Environment Variables
+ENV M2_HOME=./apache-maven-3.9.9
+PATH=$M2_HOME/bin:$PATH
+RUN export PATH
+
+# Verify the Maven installation
+RUN maven -version
+
+# Run IWA-Java application
+RUN mvn clean package && \
+    mvn spring-boot:run
+
+# Make port 8080 available to the world outside this container
+EXPOSE WEBSITE localhost:8080
