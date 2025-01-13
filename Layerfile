@@ -1,4 +1,4 @@
-FROM openjdk:8-jdk-slim
+FROM vm/ubuntu:22.04
 
 #LABEL maintainer="kevin.lee@microfocus.com"
 
