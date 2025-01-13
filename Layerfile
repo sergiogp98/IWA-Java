@@ -1,24 +1,30 @@
-#Use an Ubuntu 18.04 base for our staging server
-FROM vm/ubuntu:18.04
+FROM openjdk:8-jdk-slim
 
-# To note: Layerfiles create entire VMs, *not* containers!
+LABEL maintainer="kevin.lee@microfocus.com"
 
-# Install python
-RUN apt-get update && apt-get install python3
+# Add a volume pointing to /tmp
+VOLUME /tmp
 
-# Create some files
-RUN echo '<b>some html</b>' > hello.html
-RUN echo '<b>another file</b>' > another.html
+# Make port 8080 available to the world outside this container
+EXPOSE 8080
 
-# You could also install & start a database:
-# RUN apt-get update && apt-get install postgresql
+# Location of WebInspect RuntTime Agent - comment out if not required
+#ARG WI_AGENT_DIR=/installs/Fortify_WebInspect_Runtime_Agent_Java_21.3.1/
 
-# This line copies the repository to /root in the runner
-COPY . .
-RUN ls
+# The application's jar file
+ARG JAR_FILE=target/iwa.jar
 
-# Expose the webserver in the staging server as a secure link.
-# Whenever someone clicks the link, we'll load this staging server and forward
-# their requests to it.
-RUN BACKGROUND python3 -m http.server 80
-EXPOSE WEBSITE http://localhost:80
+# Copy Fortify WebInspect Runtime Agent directory to the container - comment out if not required
+#COPY ${WI_AGENT_DIR} /wirtagent
+
+# Copy the application's jar to the container
+COPY ${JAR_FILE} app.jar
+
+# JAVA_OPTS to be passed in
+ENV JAVA_OPTS="-Xmx512m -Xss256k"
+
+# Run the jar file
+# Uncomment if not using WebInspect Agent
+ENTRYPOINT ["java","-jar","/app.jar"]
+# Comment out if not using WebInspect Agent
+#ENTRYPOINT ["java","-javaagent:/wirtagent/lib/FortifyAgent.jar","-jar","/app.jar"]
