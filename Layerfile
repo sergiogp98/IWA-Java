@@ -5,9 +5,6 @@ FROM vm/ubuntu:22.04
 # Add a volume pointing to /tmp
 WORKDIR /tmp
 
-# Make port 8080 available to the world outside this container
-EXPOSE WEBSITE localhost:8080
-
 # Location of WebInspect RuntTime Agent - comment out if not required
 #ARG WI_AGENT_DIR=/installs/Fortify_WebInspect_Runtime_Agent_Java_21.3.1/
 
@@ -28,3 +25,6 @@ ENV JAVA_OPTS="-Xmx512m -Xss256k"
 RUN BACKGROUND java -jar /app.jar
 # Comment out if not using WebInspect Agent
 #ENTRYPOINT ["java","-javaagent:/wirtagent/lib/FortifyAgent.jar","-jar","/app.jar"]
+
+# Make port 8080 available to the world outside this container
+EXPOSE WEBSITE localhost:8080
